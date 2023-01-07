@@ -1,4 +1,4 @@
-package com.adventofcode.december04;
+package com.adventofcode.old.december04;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

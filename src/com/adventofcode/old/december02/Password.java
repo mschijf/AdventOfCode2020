@@ -1,4 +1,4 @@
-package com.adventofcode.december02;
+package com.adventofcode.old.december02;
 
 public class Password {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.adventofcode.december01;
+package com.adventofcode.old.december01;
 
 public class Add2020_2 {
     public static void main(String[] args) {

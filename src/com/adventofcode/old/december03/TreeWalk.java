@@ -1,4 +1,4 @@
-package com.adventofcode.december03;
+package com.adventofcode.old.december03;
 
 public class TreeWalk {
 

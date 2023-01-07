@@ -1,4 +1,4 @@
-package com.adventofcode.december01;
+package com.adventofcode.old.december01;
 
 import java.util.List;
 

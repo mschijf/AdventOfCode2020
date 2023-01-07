@@ -1,4 +1,4 @@
-package com.adventofcode.december02;
+package com.adventofcode.old.december03;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -7,43 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Input {
-    private ArrayList<Integer> field1 = new ArrayList();
-    private ArrayList<Integer> field2 = new ArrayList();
-    private ArrayList<String>  field3 = new ArrayList();
-    private ArrayList<String>  field4 = new ArrayList();
+    private List<String> list;
 
-    public Input() {
-        List<String> list = readFile("data/input02");
-        doSplit(list);
+    public Input(String fileName) {
+        list = readFile("data/" + fileName);
     }
 
-    public int getField1(int i) {
-        return field1.get(i);
-    }
-    public int getField2(int i) {
-        return field2.get(i);
-    }
-    public String getField3(int i) {
-        return field3.get(i);
-    }
-    public String getField4(int i) {
-        return field4.get(i);
+    List<String> getTreeLines() {
+        return list;
     }
 
-    public int size() {
-        return field1.size();
-    }
-
-
-    private void doSplit(List<String> list) {
-        for (String line: list) {
-            List<String> splitted = split(line, "- :");
-            field1.add(Integer.valueOf(splitted.get(0)));
-            field2.add(Integer.valueOf(splitted.get(1)));
-            field3.add(splitted.get(2));
-            field4.add(splitted.get(3));
-        }
-    }
+    //-----------------------------------------------------------------------------------------------------------
 
     private List<String> split(String input, String delimeters) {
         List<String> result = new ArrayList<String>();
@@ -77,6 +51,8 @@ public class Input {
         }
         return -1;
     }
+
+    //-----------------------------------------------------------------------------------------------------------
 
     private List<String> readFile(String fileName) {
         int lineCount = 0;
