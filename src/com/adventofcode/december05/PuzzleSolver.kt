@@ -8,17 +8,7 @@ fun main() {
 
 class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
 
-    private val boardingpassList = input.inputLines
-        .map {
-            Pair(
-                it.substring(0,7)
-                    .replace('F', '0').replace('B', '1')
-                    .toInt(2),
-                it.substring(7)
-                    .replace('L', '0').replace('R', '1')
-                    .toInt(2))
-        }
-        .map {8*it.first + it.second}
+    private val boardingpassList = input.inputLines.map { toSeatId(it) }
 
     override fun resultPartOne(): String {
         return boardingpassList.max().toString()
@@ -32,5 +22,19 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
         }
         return "NOT FOUND"
     }
+
+
+    private fun toSeatRow(bp: String): Int {
+        return bp.substring(0,7)
+            .replace('F', '0').replace('B', '1')
+            .toInt(2)
+    }
+
+    private fun toSeatCol(bp: String): Int {
+        return bp.substring(7)
+            .replace('L', '0').replace('R', '1')
+            .toInt(2)
+    }
+    private fun toSeatId(bp: String) = 8*toSeatRow(bp) + toSeatCol(bp)
 }
 
