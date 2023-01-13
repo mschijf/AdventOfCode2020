@@ -9,17 +9,17 @@ fun main() {
 class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
 
     override fun resultPartOne(): String {
-        val x = input.inputLines.map { Expr.fromString(it) }
-        val y = x.map { it.getValue() }
-        return y.sum().toString()
-
+        return input.inputLines
+            .map { Expr.fromString(it) }
+            .sumOf { it.getValue() }
+            .toString()
     }
 
     override fun resultPartTwo(): String {
-        val x = input.inputLines.map { Expr.fromStringPartTwo(it) }
-        val y = x.map { it.getValue() }
-        return y.sum().toString()
-
+        return input.inputLines
+            .map { Expr.fromStringPartTwo(it) }
+            .sumOf { it.getValue() }
+            .toString()
     }
 }
 
@@ -48,12 +48,12 @@ abstract class Expr{
                 val left = cleanInput.substring(0, index-3)
                 val operator = cleanInput[index-2]
                 return Expression(fromStringPartTwo(left), fromStringPartTwo(right), operator)
-            } else {
-                val right = cleanInput.last().toString()
-                val left = cleanInput.substring(0, cleanInput.length-4)
-                val operator = cleanInput[cleanInput.length-3]
-                return Expression(fromStringPartTwo(left), fromStringPartTwo(right), operator)
             }
+
+            val right = cleanInput.last().toString()
+            val left = cleanInput.substring(0, cleanInput.length-4)
+            val operator = cleanInput[cleanInput.length-3]
+            return Expression(fromStringPartTwo(left), fromStringPartTwo(right), operator)
         }
 
         fun fromString(input: String): Expr {
@@ -68,25 +68,19 @@ abstract class Expr{
                 val left = cleanInput.substring(0, index-3)
                 val operator = cleanInput[index-2]
                 return Expression(fromString(left), fromString(right), operator)
-            } else {
-                val right = cleanInput.last().toString()
-                val left = cleanInput.substring(0, cleanInput.length-4)
-                val operator = cleanInput[cleanInput.length-3]
-                return Expression(fromString(left), fromString(right), operator)
             }
+            val right = cleanInput.last().toString()
+            val left = cleanInput.substring(0, cleanInput.length-4)
+            val operator = cleanInput[cleanInput.length-3]
+            return Expression(fromString(left), fromString(right), operator)
         }
 
         private fun removeBeginEndParenthesis(input: String): String {
-            return if (input.last() == ')') {
-                val index = findLeftParenthesisFromRight(input)
-                if (index == 0) {
-                    removeBeginEndParenthesis(input.substring(1,input.length-1))
-                } else {
-                    input
-                }
-            } else {
-                input
-            }
+            if (input.last() != ')')
+                return input
+            if (findLeftParenthesisFromRight(input) != 0)
+                return input
+            return removeBeginEndParenthesis(input.substring(1,input.length-1))
         }
 
         private fun findLeftParenthesisFromRight(input: String): Int {
