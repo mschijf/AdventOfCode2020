@@ -34,14 +34,22 @@ class RegEx(inputLines: List<String>, isPartTwo: Boolean) {
         .toMutableMap()
 
     init {
-        //parts 42 and 31 have to be repeated both the same time (> 0 times), for example
-        // 42 42 42 31 31 31   or     42 31   but not    42 42 42 31 31
-        // I make a regex like "42{1} 31{1} | 42{2} 31{2} | ..." etc.
+        // to replace rule 11, with 11: 42 31 | 42 11 31
+        // parts 42 and 31 have to be repeated both the same time (> 0 times), for example
+        //       42 42 42 31 31 31   or     42 31   but not    42 42 42 31 31
+        // therefore, I made a regex like "42{1} 31{1} | 42{2} 31{2} | ..." etc.
         // I tried it with several counts, but after 3, the matching results did not change.
         // not a nice solution, but sufficient for this puzzle
+
+        // unfortunately, recursive regex matching doesn't work in kotlin regex function, thereforem, we cannot use
+        // below described technique:
+        // The regexes a(?R)?z, a(?0)?z, and a\g<0>?z all match one or more letters a followed by exactly
+        // the same number of letters z. Since these regexes are functionally identical,
+        // we’ll use the syntax with R for recursion to see how this regex matches the string aaazzz.
         if (isPartTwo) {
             regExLineList[8] = "42 +"           //8: 42 | 42 8
             regExLineList[11] = List(4){"42 {${it+1}} 31 {${it+1}}"}.joinToString(" | ") //11: 42 31 | 42 11 31
+
         }
     }
 
