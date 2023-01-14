@@ -17,3 +17,7 @@ fun CharSequence.distinct(): String {
 fun String.substringBetween(afterDelimeter: String, beforeDelimter: String): String {
     return this.substringAfter(afterDelimeter).substringBefore(beforeDelimter)
 }
+
+fun CharSequence.hasOnlyDigits(): Boolean {
+    return this.all{ch -> ch.isDigit()}
+}
