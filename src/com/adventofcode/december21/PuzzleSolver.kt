@@ -20,22 +20,22 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
     }
 
     override fun resultPartTwo(): String {
-        val possibleIngredientsForAllergenes = totalAllergenSet.map{ allergen -> Pair(allergen, getPossibleIngredientsPerAllergen(allergen).toMutableSet()) }
+        val possibleIngredientsForAllergenes = totalAllergenSet.associateWith { allergen -> getPossibleIngredientsPerAllergen(allergen).toMutableSet() }
         do {
-            val singleSet = possibleIngredientsForAllergenes.filter { it.second.size == 1 }.map{ it.second }.flatten().toSet()
-            for (type in possibleIngredientsForAllergenes) {
-                if (type.second.size > 1) {
-                    type.second.removeAll(singleSet)
+            val singleSet = possibleIngredientsForAllergenes.values.filter { it.size == 1 }.flatten().toSet()
+            for (ingredient in possibleIngredientsForAllergenes.values) {
+                if (ingredient.size > 1) {
+                    ingredient.removeAll(singleSet)
                 }
             }
-        } while (possibleIngredientsForAllergenes.any { it.second.size > 1 })
+        } while (possibleIngredientsForAllergenes.values.any { it.size > 1 })
 
-        return possibleIngredientsForAllergenes.sortedBy { it.first }.joinToString(",") { it.second.first().name }
+        return possibleIngredientsForAllergenes.toSortedMap().values.joinToString(",") { it.first().name }
     }
 
     private fun getPossibleIngredientsPerAllergen(allergen: Allergen): Set<Ingredient> {
         var result = emptySet<Ingredient>()
-        foodList.filter {food -> food.hasAllergen(allergen) }.forEach {food ->
+        for (food in foodList.filter {food -> food.hasAllergen(allergen) }) {
             result = if (result.isEmpty()) food.ingredientSet else result intersect food.ingredientSet
         }
         return result
