@@ -1,32 +1,21 @@
 package com.adventofcode.december20
 
-class Image(arrangement: Array<Array<TileConfig?>>) {
-    private val compressedImage = mergeTiles(arrangement)
+class Image(arrangement: Arrangement) {
+    private val compressedImage = arrangement.mergeTiles()
     private val seaMonsterPattern = listOf(
         "                  # ",
         "#    ##    ##    ###",
         " #  #  #  #  #  #   ")
 
-    fun getRoughNess(): Long {
+    fun getRoughNess(): Int {
         val count = countMonsters()
-        val roughness = compressedImage.sumOf { it.count{ch -> ch == '#'}} - count*seaMonsterPattern.sumOf { it.count{ch -> ch == '#'}}
-        return roughness.toLong()
+        if (count == 0)
+            return -1
+        val hashTagPerMonster = seaMonsterPattern.sumOf { it.count{ch -> ch == '#'}}
+        val hashtagPerImage = compressedImage.sumOf { it.count{ch -> ch == '#'}}
+        return hashtagPerImage - count * hashTagPerMonster
     }
 
-    private fun mergeTiles(arrangement: Array<Array<TileConfig?>>): List<String> {
-        val result = mutableListOf<String>()
-        val compressed = arrangement.map{ rows -> rows.map{ tileCfg -> tileCfg!!.removeBorder()} }
-        for (puzzleRow in compressed.indices) {
-            for (tileRow in compressed[puzzleRow][0].indices) {
-                val totalRow = mutableListOf<Char>()
-                for (puzzleCol in compressed[puzzleRow].indices) {
-                    totalRow += compressed[puzzleRow][puzzleCol][tileRow]
-                }
-                result.add(totalRow.joinToString(""))
-            }
-        }
-        return result
-    }
 
     private fun countMonsters(): Int {
         var count = 0

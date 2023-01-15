@@ -14,17 +14,16 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
         tileList.forEach {it.updateMatchList(tileList)}
     }
 
-
     override fun resultPartOne(): String {
-        val squareArrangement = SquareArrangement(tileList, false)
-        val x = squareArrangement.getArrangement()
-        return x.toString()
+        val squareArrangement = SquareArrangement(tileList)
+        val arrangement = squareArrangement.getFirstArrangement()
+        return arrangement.getCornerSquaresProduct().toString()
     }
 
     override fun resultPartTwo(): String {
-        val squareArrangement = SquareArrangement(tileList, true)
-        val countMonster = squareArrangement.getArrangement()
-        return countMonster.toString()
+        val squareArrangement = SquareArrangement(tileList)
+        val arrangement = squareArrangement.getArrangementWithSeaMonsters()
+        return arrangement.getRoughness().toString()
     }
 
 }
