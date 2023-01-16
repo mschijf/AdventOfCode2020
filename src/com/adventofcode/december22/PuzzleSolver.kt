@@ -33,10 +33,10 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
 
     private fun playGame(playerList: List<Player>): Int {
         while (playerList.none { pl -> pl.cards.isEmpty() }) {
-            val winner = if (playerList[0].cards.first() > playerList[1].cards.first()) 0 else 1
-            playerList[winner].cards.add(playerList[winner].cards.first())
-            playerList[winner].cards.add(playerList[1-winner].cards.first())
-            playerList.forEach { pl -> pl.cards.removeAt(0) }
+            val cards = playerList.map{it.cards.removeAt(0) }
+            val winner = if (cards[0] > cards[1]) 0 else 1
+            playerList[winner].cards.add(cards[winner])
+            playerList[winner].cards.add(cards[1-winner])
         }
         return if (playerList[0].cards.isNotEmpty()) 0 else 1
     }
@@ -46,13 +46,13 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
         while (playerList.none { pl -> pl.cards.isEmpty() }) {
             val hashValue = playerList[0].hashString() + playerList[1].hashString()
             if (hashValue in historySet) {
-                return 0
+                return 0 //config has happened before in this game. Winner is player 1 (and is called here 0)
             }
             historySet.add(hashValue)
 
             val cards = playerList.map{it.cards.removeAt(0) }
             val winner = if (playerList[0].cards.size >= cards[0] && playerList[1].cards.size >= cards[1]) {
-                recursiveCombat(playerList.mapIndexed{index, pl -> Player(pl.cards.subList(0,cards[index]))}, gameNr+1)
+                recursiveCombat(playerList.mapIndexed{index, pl -> pl.clone(cards[index])}, gameNr+1)
             } else {
                 if (cards[0] > cards[1]) 0 else 1
             }
@@ -64,9 +64,12 @@ class PuzzleSolver(test: Boolean) : PuzzleSolverAbstract(test) {
     }
 }
 
-class Player(inputCards: MutableList<Int>) {
-    val cards = inputCards.map {it}.toMutableList()
-    constructor(inputLines: List<String>) : this(inputLines.drop(1).map { it.toInt() }.toMutableList())
+class Player(inputLines: List<String>) {
+    val cards = inputLines.drop(1).map { it.toInt() }.toMutableList()
+
+    fun clone(numberOfCards: Int): Player {
+        return Player(listOf("dummy") + cards.subList(0, numberOfCards).map { it.toString() })
+    }
 
     fun hashString(): String {
         return cards.toString()
